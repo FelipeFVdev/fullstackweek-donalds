@@ -1,16 +1,20 @@
 import { ChevronLeftIcon, ChevronRightIcon, Trash2Icon } from "lucide-react";
 import Image from "next/image";
+import { useContext } from "react";
 
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/helpers/format-currency";
 
-import { CartProduct } from "../contexts/cart";
+import { CartContext, CartProduct } from "../contexts/cart";
 
 interface CartItemProps {
   product: CartProduct;
 }
 
 const CartProductItem = ({ product }: CartItemProps) => {
+  const { decreaseProductQuantity, increaseProductQuantity, removeProduct } =
+    useContext(CartContext);
+
   return (
     <div className="flex items-center justify-between">
       {/* ESQUERDA */}
@@ -31,7 +35,7 @@ const CartProductItem = ({ product }: CartItemProps) => {
             <Button
               variant="outline"
               className="h-7 w-7 rounded-lg"
-              // onClick={handleDecreaseQuantity}
+              onClick={() => decreaseProductQuantity(product.id)}
             >
               <ChevronLeftIcon />
             </Button>
@@ -39,7 +43,7 @@ const CartProductItem = ({ product }: CartItemProps) => {
             <Button
               variant="destructive"
               className="h-7 w-7 rounded-lg"
-              // onClick={handleIncreaseQuantity}
+              onClick={() => increaseProductQuantity(product.id)}
             >
               <ChevronRightIcon />
             </Button>
@@ -48,7 +52,11 @@ const CartProductItem = ({ product }: CartItemProps) => {
       </div>
 
       {/* DIREITA */}
-      <Button className="h-7 w-7" variant="outline">
+      <Button
+        className="h-7 w-7"
+        variant="outline"
+        onClick={() => removeProduct(product.id)}
+      >
         <Trash2Icon />
       </Button>
     </div>
